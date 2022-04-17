@@ -52,6 +52,10 @@ namespace Taxi_Manager.Domain.Entities
             Car = car;
             car.AssasignedDrivers.Add(this);
         }
+        public void AssignShift(Shift shift)
+        {
+            Shift = shift;
+        }
         public void CheckDriversLicenceExpiration()
         {
             if (LicenceExpiery < DateTime.Now)
@@ -66,6 +70,14 @@ namespace Taxi_Manager.Domain.Entities
             {
                 ConsoleHelper.TextColor($"Driver {FullName} with license [{Licence}] expiering on {LicenceExpiery:dd/MM(MMM)/yyy}", ConsoleColor.Green);
             }
+        }
+        public bool HasValidLicence()
+        {
+            return LicenceExpiery > DateTime.Now;
+        }
+        public bool IsAssigned()
+        {
+            return Shift == null && Car == null;
         }
         public void Unassign()
         {

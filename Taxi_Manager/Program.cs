@@ -33,6 +33,9 @@ namespace Taxi_Manager
             Driver driver8 = new Driver("Pero", "Perovski", "AAA888", new DateTime(2022, 9, 21));
             Driver driver9 = new Driver("Kire", "Kirevski", "AAA999", new DateTime(2022, 12, 12));
 
+            Console.WriteLine(driver9.IsAssigned());
+            Console.WriteLine(driver9.HasValidLicence());
+            Console.ReadLine();
             Car car1 = new Car("Renault - Megane", "sk-111-aa", new DateTime(2022, 7, 12));
             Car car2 = new Car("Mercedes - E class", "sk-222-bb", new DateTime(2021, 8, 8));
             Car car3 = new Car("Dacia - Duster", "sk-333-cc", new DateTime(2024, 5, 6));
@@ -291,18 +294,18 @@ namespace Taxi_Manager
                 return filteredCars[index - 1];
             }
         }
+
         public static void HandleAssignDriver(DriverService driverService, CarService carService)
         {
             while (true)
             {
                 Console.Clear();
-                List<Driver> unassingedDrivers = driverService.GetAll().Where(d => d.Shift == null && d.Car == null).ToList();
+                List<Driver> unassingedDrivers = driverService.GetAll().Where(d => d.IsAssigned() && d.HasValidLicence()).ToList();
                 for (int i = 0; i < unassingedDrivers.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}.{unassingedDrivers[i].Print()}");
                 }
                 Console.WriteLine("Enter index to assign driver or 'q' to exit");
-
                 string input = Console.ReadLine();
                 if (input.ToLower() == "q")
                 {
@@ -325,7 +328,9 @@ namespace Taxi_Manager
                 Car assignCar = SelectCarToAssign(carService, assignShift);
                 ConsoleHelper.TextColor($"Successfully assigned {assignCar.Model} to {assignDriver.FullName}", ConsoleColor.Green);
                 assignDriver.AssignCar(assignCar);
+                assignDriver.AssignShift(assignShift);
                 Console.ReadLine();
+                break;
             }
         }
         public static void ManagerOptions(User manager, DriverService driverService, UserService userService, CarService carService)
