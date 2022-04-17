@@ -34,6 +34,10 @@ namespace Taxi_Manager.Domain.Entities
             decimal utilized = ((decimal)AssasignedDrivers.Count / (decimal)Enum.GetNames(typeof(Shift)).Length) * 100;
             return $"Car :(ID-{Id}) {Model} , Licence plate : {LicensePlate} and utilized : {Math.Ceiling(utilized)}% ";
         }
+        public bool HasValidLicence()
+        {
+            return LicensePlateExpieryDate > DateTime.Now;
+        }
         public void CheckLicencePlateExpiration()
         {
             if (LicensePlateExpieryDate < DateTime.Now)

@@ -33,9 +33,7 @@ namespace Taxi_Manager
             Driver driver8 = new Driver("Pero", "Perovski", "AAA888", new DateTime(2022, 9, 21));
             Driver driver9 = new Driver("Kire", "Kirevski", "AAA999", new DateTime(2022, 12, 12));
 
-            Console.WriteLine(driver9.IsAssigned());
-            Console.WriteLine(driver9.HasValidLicence());
-            Console.ReadLine();
+
             Car car1 = new Car("Renault - Megane", "sk-111-aa", new DateTime(2022, 7, 12));
             Car car2 = new Car("Mercedes - E class", "sk-222-bb", new DateTime(2021, 8, 8));
             Car car3 = new Car("Dacia - Duster", "sk-333-cc", new DateTime(2024, 5, 6));
@@ -59,25 +57,25 @@ namespace Taxi_Manager
             driverService.Add(driver8);
             driverService.Add(driver9);
 
-            driver1.Shift = Shift.Morning;
-            driver2.Shift = Shift.Afternoon;
-            driver3.Shift = Shift.Night;
-            driver1.AssignCar(car1);
-            driver2.AssignCar(car1);
-            driver3.AssignCar(car1);
+            //driver1.Shift = Shift.Morning;
+            //driver2.Shift = Shift.Afternoon;
+            //driver3.Shift = Shift.Night;
+            //driver1.AssignCar(car1);
+            //driver2.AssignCar(car1);
+            //driver3.AssignCar(car1);
 
-            driver4.Shift = Shift.Morning;
-            driver5.Shift = Shift.Night;
-            driver4.AssignCar(car2);
-            driver5.AssignCar(car2);
+            //driver4.Shift = Shift.Morning;
+            //driver5.Shift = Shift.Night;
+            //driver4.AssignCar(car2);
+            //driver5.AssignCar(car2);
 
-            driver6.Shift = Shift.Morning;
-            driver7.Shift = Shift.Afternoon;
-            driver8.Shift = Shift.Night;
-            driver6.AssignCar(car3);
-            driver7.AssignCar(car3);
+            //driver6.Shift = Shift.Morning;
+            //driver7.Shift = Shift.Afternoon;
+            //driver8.Shift = Shift.Night;
+            //driver6.AssignCar(car3);
+            //driver7.AssignCar(car3);
 
-            driver8.AssignCar(car4);
+            //driver8.AssignCar(car4);
 
 
             carService.Add(car1);
@@ -207,7 +205,6 @@ namespace Taxi_Manager
         }
         public static void HandleUnassignDriver(DriverService driverService)
         {
-
             while (true)
             {
                 Console.Clear();
@@ -272,7 +269,7 @@ namespace Taxi_Manager
         }
         public static Car SelectCarToAssign(CarService carService, Shift selectedShift)
         {
-            List<Car> filteredCars = carService.GetAll().Where(c => c.AssasignedDrivers.All(d => d.Shift != selectedShift)).ToList();
+            List<Car> filteredCars = carService.GetAll().Where(c => c.AssasignedDrivers.All(d => d.Shift != selectedShift) && c.HasValidLicence()).ToList();
 
             for (int i = 0; i < filteredCars.Count; i++)
             {
