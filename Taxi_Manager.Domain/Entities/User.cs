@@ -41,7 +41,7 @@ namespace Taxi_Manager.Domain.Entities
         }
         public override string Print()
         {
-            return $"{Username} - {Role}";
+            return $"{Username} [{Role}]";
         }
     }
 }

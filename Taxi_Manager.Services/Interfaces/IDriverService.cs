@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Taxi_Manager.Services.Interfaces
 {
-    internal class IDriverService
+    internal interface IDriverService
     {
     }
 }

@@ -5,7 +5,8 @@ using Taxi_Manager.Domain.Entities;
 
 namespace Taxi_Manager.Services.Services
 {
-    public class DriverService<T> : BaseService<Driver>
+    public class DriverService : BaseService<Driver>
     {
+
     }
 }

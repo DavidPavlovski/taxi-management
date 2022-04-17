@@ -4,8 +4,4 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Taxi_Manager.Helpers\Taxi_Manager.Helpers.csproj" />
-  </ItemGroup>
-
 </Project>
