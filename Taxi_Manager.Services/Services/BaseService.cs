@@ -39,5 +39,9 @@ namespace Taxi_Manager.Services.Services
         {
             return Db.RemoveById(id);
         }
+        public void Seed(List<T> items)
+        {
+            items.ForEach(item => Db.Add(item));
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Taxi_Manager.Domain.Enums;
 using Taxi_Manager.Helpers;
@@ -34,6 +35,12 @@ namespace Taxi_Manager.Domain.Entities
             decimal utilized = ((decimal)AssasignedDrivers.Count / (decimal)Enum.GetNames(typeof(Shift)).Length) * 100;
             return $"Car :(ID-{Id}) {Model} , Licence plate : {LicensePlate} and utilized : {Math.Ceiling(utilized)}% ";
         }
+
+        public bool IsAvailableForShif(Shift shift)
+        {
+            return AssasignedDrivers.Any(x => x.Shift != shift) || AssasignedDrivers.Count == 0;
+        }
+
         public bool HasValidLicence()
         {
             return LicensePlateExpieryDate > DateTime.Now;
@@ -53,6 +60,9 @@ namespace Taxi_Manager.Domain.Entities
                 ConsoleHelper.TextColor($" Car Id [Id] - Plate [{LicensePlate}] expiering on {LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Green);
             }
         }
-
+        public void UnassignDriver(Driver driver)
+        {
+            AssasignedDrivers.Remove(driver);
+        }
     }
 }

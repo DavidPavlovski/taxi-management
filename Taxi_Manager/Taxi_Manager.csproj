@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Taxi_Manager.Helpers\Taxi_Manager.Helpers.csproj" />
     <ProjectReference Include="..\Taxi_Manager.Services\Taxi_Manager.Services.csproj" />
   </ItemGroup>
 

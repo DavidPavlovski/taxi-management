@@ -5,9 +5,17 @@ using Taxi_Manager.Domain.Entities;
 
 namespace Taxi_Manager.Services.Interfaces
 {
-    internal interface IUserService
+    public interface IUserService : IBaseService<User>
     {
-        User Login(string username, string password);
-        bool ChangePassword(int id, string oldPassword, string newPassword);
+        User CurrentUser { get; }
+        void Login();
+        void Logout();
+        void CreateNewUser();
+        void DeleteUser(IUIService uiService);
+        void ChangePassword();
+        bool UsernameExists(string username);
+        void UnassignDriver(IDriverService driverService, IUIService uiService);
+        void HandleAssignDriver(IDriverService driverService, ICarService carService, IUIService uiService);
+        List<User> FilterUsers(int id);
     }
 }

@@ -77,10 +77,11 @@ namespace Taxi_Manager.Domain.Entities
         }
         public bool IsAssigned()
         {
-            return Shift == null && Car == null;
+            return Shift != null && Car != null;
         }
         public void Unassign()
         {
+            Car.UnassignDriver(this);
             Car = null;
             Shift = null;
         }
