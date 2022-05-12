@@ -12,6 +12,7 @@ namespace Taxi_Manager.Domain.Entities
         public string Password { get; set; }
         public Role Role { get; set; }
 
+        public User() { }
         public User(string username, string password, Role role)
         {
             if (string.IsNullOrEmpty(username))
@@ -39,6 +40,7 @@ namespace Taxi_Manager.Domain.Entities
             Password = password;
             Role = role;
         }
+
         public override string Print()
         {
             return $"{Username} [{Role}]";

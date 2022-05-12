@@ -23,5 +23,6 @@ namespace Taxi_Manager.Services.Services
         {
             return Db.GetAll().Where(x => x.HasValidLicence() && !x.IsAssigned()).ToList();
         }
+
     }
 }

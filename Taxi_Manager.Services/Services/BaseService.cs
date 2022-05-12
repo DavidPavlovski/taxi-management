@@ -43,5 +43,10 @@ namespace Taxi_Manager.Services.Services
         {
             items.ForEach(item => Db.Add(item));
         }
+
+        public bool Update(T entity)
+        {
+            return Db.Update(entity);
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace Taxi_Manager.Domain.Entities
         public Car Car { get; set; }
         public string Licence { get; set; }
         public DateTime LicenceExpiery { get; set; }
+
+        public Driver() { }
         public Driver(string firstName, string lastName, string licence, DateTime licenceExpiery)
         {
             FirstName = firstName;
@@ -25,15 +27,7 @@ namespace Taxi_Manager.Domain.Entities
             Shift = null;
             Car = null;
         }
-        public Driver(string firstName, string lastName, Shift shift, Car car, string licence, DateTime licenceExpiery)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Shift = shift;
-            Car = car;
-            Licence = licence;
-            LicenceExpiery = licenceExpiery;
-        }
+
 
         public override string Print()
         {
@@ -45,12 +39,12 @@ namespace Taxi_Manager.Domain.Entities
         }
         public void AssignCar(Car car)
         {
-            if (car.AssasignedDrivers.Any(d => d.Shift == this.Shift))
+            if (car.AssignedDrivers.Any(d => d.Shift == this.Shift))
             {
                 throw new Exception("Car already in use for that shift");
             }
             Car = car;
-            car.AssasignedDrivers.Add(this);
+            car.AssignDriver(this);
         }
         public void AssignShift(Shift shift)
         {

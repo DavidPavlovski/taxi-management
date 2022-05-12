@@ -12,5 +12,6 @@ namespace Taxi_Manager.Services.Interfaces
         T GetById(int id);
         List<T> GetAll();
         void Seed(List<T> items);
+        bool Update(T entity);
     }
 }

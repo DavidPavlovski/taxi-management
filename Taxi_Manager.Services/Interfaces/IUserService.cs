@@ -15,7 +15,7 @@ namespace Taxi_Manager.Services.Interfaces
         void ChangePassword();
         bool UsernameExists(string username);
         void UnassignDriver(IDriverService driverService, IUIService uiService);
-        void HandleAssignDriver(IDriverService driverService, ICarService carService, IUIService uiService);
+        void AssignDriver(IDriverService driverService, ICarService carService, IUIService uiService);
         List<User> FilterUsers(int id);
     }
 }

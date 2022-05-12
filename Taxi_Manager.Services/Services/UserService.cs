@@ -33,6 +33,7 @@ namespace Taxi_Manager.Services.Services
                 throw new Exception("Something went wrong");
             }
             CurrentUser.Password = newPassword;
+            Db.Update(CurrentUser);
         }
 
         public bool UsernameExists(string username)
@@ -72,14 +73,31 @@ namespace Taxi_Manager.Services.Services
             List<User> filteredUsers = FilterUsers(CurrentUser.Id);
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("Delete a user :");
-                uiService.PrintEntites(filteredUsers);
-                int index = ConsoleHelper.GetNumberInput(ConsoleHelper.GetInput("Enter user index to delete : "), filteredUsers.Count);
-                User userToDelete = filteredUsers[index - 1];
-                Remove(userToDelete.Id);
-                ConsoleHelper.TextColor($"Successfully deleted : {userToDelete.Print()}", ConsoleColor.Green);
-                break;
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("Delete a user :");
+                    uiService.PrintEntites(filteredUsers);
+                    string input = ConsoleHelper.GetInput("Enter user index to delete or \"q\" to exit: ");
+                    if (input.ToLower() == "q")
+                    {
+                        break;
+                    }
+                    int index = ConsoleHelper.GetNumberInput(input, filteredUsers.Count);
+                    User userToDelete = filteredUsers[index - 1];
+                    bool success = Remove(userToDelete.Id);
+                    if (success)
+                    {
+                        ConsoleHelper.TextColor($"Successfully deleted : {userToDelete.Print()}", ConsoleColor.Green);
+                    }
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    ConsoleHelper.TextColor(ex.Message, ConsoleColor.Red);
+                    Console.ReadLine();
+                    continue;
+                }
             }
         }
 
@@ -102,6 +120,7 @@ namespace Taxi_Manager.Services.Services
                     int index = ConsoleHelper.GetNumberInput(input, assignedDrivers.Count);
                     Driver unassinedDriver = assignedDrivers[index - 1];
                     unassinedDriver.Unassign();
+                    driverService.Update(unassinedDriver);
                     ConsoleHelper.TextColor($"Successfully unassigned {unassinedDriver.FullName}", ConsoleColor.Green);
                     break;
                 }
@@ -114,7 +133,7 @@ namespace Taxi_Manager.Services.Services
             }
         }
 
-        public void HandleAssignDriver(IDriverService driverService, ICarService carService, IUIService uiService)
+        public void AssignDriver(IDriverService driverService, ICarService carService, IUIService uiService)
         {
             if (CurrentUser.Role != Role.Manager) throw new Exception("You are not authorized for this action.");
             while (true)
@@ -137,6 +156,8 @@ namespace Taxi_Manager.Services.Services
                     Console.ReadLine();
                     assignDriver.AssignCar(assignCar);
                     assignDriver.AssignShift(assignShift);
+                    carService.Update(assignCar);
+                    driverService.Update(assignDriver);
                     break;
                 }
                 catch (Exception ex)
