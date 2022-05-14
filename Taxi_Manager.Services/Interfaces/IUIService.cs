@@ -9,7 +9,7 @@ namespace Taxi_Manager.Services.Interfaces
 {
     public interface IUIService
     {
-        void PrintEntites<T>(List<T> entites) where T : BaseEntity;
+        void PrintEntites<T>(List<T> entites , string extension = null) where T : BaseEntity;
         void UserMenu(Role role);
         MenuOptions GetUserChoice(Role role);
     }

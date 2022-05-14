@@ -16,9 +16,7 @@ namespace Taxi_Manager.DataAccess
         private int IdCounter { get; set; }
         public TaxiDB()
         {
-
             _dataDirectory = @"Data";
-
             _dataFile = _dataDirectory + @$"\{typeof(T).Name}Data.json";
             if (!Directory.Exists(_dataDirectory))
             {

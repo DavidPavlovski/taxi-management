@@ -22,7 +22,6 @@ namespace Taxi_Manager.Services.Services
                 throw new Exception("Invalid username or password. Try again.");
             }
         }
-
         public void ChangePassword()
         {
             Console.WriteLine("Change password.");
@@ -54,17 +53,25 @@ namespace Taxi_Manager.Services.Services
         public void CreateNewUser()
         {
             if (CurrentUser.Role != Role.Administrator) throw new Exception("You are not authorized for this action.");
-            Console.WriteLine("Create a new user.");
-            string username = ConsoleHelper.GetInput("Enter username : ");
-            if (UsernameExists(username))
+            try
             {
-                throw new Exception($"User with the {username} username already exists.");
+                Console.WriteLine("Create a new user.");
+                string username = ConsoleHelper.GetInput("Enter username : ");
+                if (UsernameExists(username))
+                {
+                    throw new Exception($"User with the {username} username already exists.");
+                }
+                string password = ConsoleHelper.GetInput("Enter password : ");
+                Role role = EnumHelper.SelectEnum<Role>("role");
+                User newUser = new User(username, password, role);
+                Db.Add(newUser);
+                ConsoleHelper.TextColor($"Successfully added {newUser.Print()}", ConsoleColor.Green);
             }
-            string password = ConsoleHelper.GetInput("Enter password : ");
-            Role role = EnumHelper.SelectEnum<Role>("role");
-            User newUser = new User(username, password, role);
-            Db.Add(newUser);
-            ConsoleHelper.TextColor($"Successfully added {newUser.Print()}", ConsoleColor.Green);
+            catch (Exception ex)
+            {
+                ConsoleHelper.TextColor("Something went wrong.", ConsoleColor.Green);
+                Console.ReadLine();
+            }
         }
 
         public void DeleteUser(IUIService uiService)
@@ -101,7 +108,7 @@ namespace Taxi_Manager.Services.Services
             }
         }
 
-        public void UnassignDriver(IDriverService driverService, IUIService uiService)
+        public void UnassignDriver(IDriverService driverService, IUIService uiService, ICarService carService)
         {
             if (CurrentUser.Role != Role.Manager) throw new Exception("You are not authorized for this action.");
             while (true)
@@ -117,10 +124,13 @@ namespace Taxi_Manager.Services.Services
                     {
                         break;
                     }
-                    int index = ConsoleHelper.GetNumberInput(input, assignedDrivers.Count);
-                    Driver unassinedDriver = assignedDrivers[index - 1];
+                    int driverIndex = ConsoleHelper.GetNumberInput(input, assignedDrivers.Count);
+                    Driver unassinedDriver = assignedDrivers[driverIndex - 1];
+                    Car unassignCar = carService.GetById(unassinedDriver.AssignedCarID);
                     unassinedDriver.Unassign();
+                    unassignCar.UnassignDriver(unassinedDriver.Id);
                     driverService.Update(unassinedDriver);
+                    carService.Update(unassignCar);
                     ConsoleHelper.TextColor($"Successfully unassigned {unassinedDriver.FullName}", ConsoleColor.Green);
                     break;
                 }
@@ -151,11 +161,11 @@ namespace Taxi_Manager.Services.Services
                     int index = ConsoleHelper.GetNumberInput(input, unassingedDrivers.Count);
                     Driver assignDriver = unassingedDrivers[index - 1];
                     Shift assignShift = EnumHelper.SelectEnum<Shift>("shift");
-                    Car assignCar = carService.SelectCarToAssign(assignShift, uiService);
+
+                    Car assignCar = carService.SelectCarToAssign(assignShift, uiService, driverService);
                     ConsoleHelper.TextColor($"Successfully assigned {assignCar.Model} to {assignDriver.FullName}", ConsoleColor.Green);
-                    Console.ReadLine();
-                    assignDriver.AssignCar(assignCar);
-                    assignDriver.AssignShift(assignShift);
+                    assignDriver.Assign(assignCar, assignShift);
+                    assignCar.AssignDriver(assignDriver.Id);
                     carService.Update(assignCar);
                     driverService.Update(assignDriver);
                     break;
@@ -168,5 +178,33 @@ namespace Taxi_Manager.Services.Services
                 }
             }
         }
+
+        public void PrintAllUsers(IUIService uiService)
+        {
+            if (CurrentUser.Role != Role.Administrator) throw new Exception("You are not authorized for this action.");
+            uiService.PrintEntites(GetAll());
+        }
+        public void PrintAllCars(IUIService uiService, ICarService carService)
+        {
+            if (CurrentUser.Role != Role.Maintenence) throw new Exception("You are not authorized for this action.");
+            uiService.PrintEntites(carService.GetAll());
+        }
+        public void PrintAllDrivers(IDriverService driverService, ICarService carService)
+        {
+            if (CurrentUser.Role != Role.Manager) throw new Exception("You are not authorized for this action.");
+            List<Driver> drivers = driverService.GetAll();
+            for (int i = 0; i < drivers.Count; i++)
+            {
+                Driver driver = drivers[i];
+                if (driver.AssignedCarID == -1)
+                {
+                    Console.WriteLine($"{i + 1}.) {driver.Print()} - Unassigned");
+                    continue;
+                }
+                Car assignedCar = driverService.GetAssignedCar(driver, carService);
+                Console.WriteLine($"{i + 1}.){driver.Print()} driving in the {driver.Shift} shift with a {assignedCar.Model} car");
+            }
+        }
+
     }
 }

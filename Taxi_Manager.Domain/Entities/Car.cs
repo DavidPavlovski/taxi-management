@@ -11,28 +11,20 @@ namespace Taxi_Manager.Domain.Entities
         public string Model { get; set; }
         public string LicensePlate { get; set; }
         public DateTime LicensePlateExpieryDate { get; set; }
-        public List<Driver> AssignedDrivers { get; set; }
-        public Car()
-        {
-        }
+        public List<int> AssignedDriversIDs { get; set; }
 
         public Car(string model, string licencePlate, DateTime licencePlateExpieryDate)
         {
             Model = model;
             LicensePlate = licencePlate;
             LicensePlateExpieryDate = licencePlateExpieryDate;
-            AssignedDrivers = new List<Driver>();
+            AssignedDriversIDs = new List<int>();
         }
 
         public override string Print()
         {
-            decimal utilized = ((decimal)AssignedDrivers.Count / (decimal)Enum.GetNames(typeof(Shift)).Length) * 100;
+            decimal utilized = ((decimal)AssignedDriversIDs.Count / 3) * 100;
             return $"Car :(ID-{Id}) {Model} , Licence plate : {LicensePlate} and utilized : {Math.Ceiling(utilized)}% ";
-        }
-
-        public bool IsAvailableForShif(Shift shift)
-        {
-            return AssignedDrivers.Any(x => x.Shift != shift) || AssignedDrivers.Count == 0;
         }
 
         public bool HasValidLicence()
@@ -56,14 +48,14 @@ namespace Taxi_Manager.Domain.Entities
             }
         }
 
-        public void AssignDriver(Driver driver)
+        public void AssignDriver(int driverID)
         {
-            AssignedDrivers.Add(driver);
+            AssignedDriversIDs.Add(driverID);
         }
 
-        public void UnassignDriver(Driver driver)
+        public void UnassignDriver(int driverID)
         {
-            AssignedDrivers.Remove(driver);
+            AssignedDriversIDs.Remove(driverID);
         }
     }
 }

@@ -8,8 +8,7 @@ namespace Taxi_Manager.Services.Interfaces
 {
     public interface ICarService : IBaseService<Car>
     {
-        List<Car> GetAvailableCarsForShift(Shift shift);
         void CheckLicenceStatus();
-        Car SelectCarToAssign(Shift selectedShift, IUIService uiService);
+        Car SelectCarToAssign(Shift selectedShift, IUIService uiService , IDriverService driverService);
     }
 }

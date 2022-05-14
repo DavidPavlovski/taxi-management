@@ -13,11 +13,10 @@ namespace Taxi_Manager.Domain.Entities
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
         public Shift? Shift { get; set; }
-        public Car Car { get; set; }
+        public int AssignedCarID { get; set; }
         public string Licence { get; set; }
         public DateTime LicenceExpiery { get; set; }
 
-        public Driver() { }
         public Driver(string firstName, string lastName, string licence, DateTime licenceExpiery)
         {
             FirstName = firstName;
@@ -25,31 +24,20 @@ namespace Taxi_Manager.Domain.Entities
             Licence = licence;
             LicenceExpiery = licenceExpiery;
             Shift = null;
-            Car = null;
+            AssignedCarID = -1;
         }
-
 
         public override string Print()
         {
-            if (Car == null || Shift == null)
-            {
-                return $"(ID-{Id}) {FullName} - unassigned";
-            }
-            return $"(ID-{Id}) {FullName} driving in the {Shift} shift with a {Car.Model} car";
+            return $"(ID-{Id}) {FullName}";
         }
-        public void AssignCar(Car car)
+
+        public void Assign(Car car, Shift shift)
         {
-            if (car.AssignedDrivers.Any(d => d.Shift == this.Shift))
-            {
-                throw new Exception("Car already in use for that shift");
-            }
-            Car = car;
-            car.AssignDriver(this);
-        }
-        public void AssignShift(Shift shift)
-        {
+            AssignedCarID = car.Id;
             Shift = shift;
         }
+
         public void CheckDriversLicenceExpiration()
         {
             if (LicenceExpiery < DateTime.Now)
@@ -71,12 +59,11 @@ namespace Taxi_Manager.Domain.Entities
         }
         public bool IsAssigned()
         {
-            return Shift != null && Car != null;
+            return Shift != null && AssignedCarID != -1;
         }
         public void Unassign()
         {
-            Car.UnassignDriver(this);
-            Car = null;
+            AssignedCarID = -1;
             Shift = null;
         }
     }

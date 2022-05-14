@@ -55,11 +55,20 @@ namespace Taxi_Manager
                         {
                             //Admin options
                             case MenuOptions.PrintAllUsers:
-                                Console.Clear();
-                                Console.WriteLine("Printing all users.");
-                                uiService.PrintEntites(userService.GetAll());
-                                Console.ReadLine();
-                                break;
+                                try
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("Printing all users.");
+                                    userService.PrintAllUsers(uiService);
+                                    Console.ReadLine();
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    ConsoleHelper.TextColor(ex.Message, ConsoleColor.Red);
+                                    Console.ReadLine();
+                                    break;
+                                }
 
                             case MenuOptions.CreateNewUser:
                                 try
@@ -96,7 +105,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    uiService.PrintEntites(carService.GetAll());
+                                    userService.PrintAllCars(uiService, carService);
                                     Console.ReadLine();
                                     break;
                                 }
@@ -110,7 +119,6 @@ namespace Taxi_Manager
                             case MenuOptions.CheckCarLicenceExpiration:
                                 try
                                 {
-
                                     Console.Clear();
                                     carService.CheckLicenceStatus();
                                     Console.ReadLine();
@@ -129,7 +137,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    uiService.PrintEntites(driverService.GetAll());
+                                    userService.PrintAllDrivers(driverService, carService);
                                     Console.ReadLine();
                                     break;
                                 }
@@ -174,7 +182,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    userService.UnassignDriver(driverService, uiService);
+                                    userService.UnassignDriver(driverService, uiService, carService);
                                     Console.ReadLine();
                                     break;
                                 }
@@ -235,7 +243,7 @@ namespace Taxi_Manager
         }
         public static void SeedInitialData(IUserService userService, IDriverService driverService, ICarService carService)
         {
-            if (userService.GetAll().Count == 0 )
+            if (userService.GetAll().Count == 0)
             {
                 User admin1 = new User("admin1", "admin1", Role.Administrator);
                 User admin2 = new User("admin2", "admin2", Role.Administrator);

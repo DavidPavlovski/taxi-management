@@ -24,5 +24,10 @@ namespace Taxi_Manager.Services.Services
             return Db.GetAll().Where(x => x.HasValidLicence() && !x.IsAssigned()).ToList();
         }
 
+        public Car GetAssignedCar(Driver driver, ICarService carService)
+        {
+            return carService.GetById(driver.AssignedCarID);
+        }
+
     }
 }

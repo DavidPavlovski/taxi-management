@@ -11,19 +11,20 @@ namespace Taxi_Manager.Services.Services
 {
     public class CarService : BaseService<Car>, ICarService
     {
-        public List<Car> GetAvailableCarsForShift(Shift shift)
+        public List<Car> GetAvailableCarsForShift(Shift shift , IDriverService driverService)
         {
-            return Db.GetAll().Where(x => x.HasValidLicence() && x.IsAvailableForShif(shift)).ToList();
+            return Db.GetAll().Where(x => x.HasValidLicence()).ToList().Where(y => y.AssignedDriversIDs.Any(id => driverService.GetById(id).Shift != shift) || y.AssignedDriversIDs.Count == 0).ToList();
         }
+
         public void CheckLicenceStatus()
         {
             Db.GetAll().ForEach(x => x.CheckLicencePlateExpiration());
         }
 
-        public Car SelectCarToAssign(Shift selectedShift, IUIService uiService)
+        public Car SelectCarToAssign(Shift selectedShift, IUIService uiService, IDriverService driverService)
         {
-            List<Car> filteredCars = GetAvailableCarsForShift(selectedShift);
-            if(filteredCars.Count == 0)
+            List<Car> filteredCars = GetAvailableCarsForShift(selectedShift , driverService);
+            if (filteredCars.Count == 0)
             {
                 throw new Exception($"No cars available for {selectedShift} shift.");
             }
@@ -33,8 +34,8 @@ namespace Taxi_Manager.Services.Services
                 {
                     Console.Clear();
                     uiService.PrintEntites(filteredCars);
-                    int index = ConsoleHelper.GetNumberInput(ConsoleHelper.GetInput("Enter car index : "), filteredCars.Count);
-                    return filteredCars[index - 1];
+                    int carIndex = ConsoleHelper.GetNumberInput(ConsoleHelper.GetInput("Enter car index : "), filteredCars.Count);
+                    return filteredCars[carIndex - 1];
                 }
                 catch (Exception ex)
                 {

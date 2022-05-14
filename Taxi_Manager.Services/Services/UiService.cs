@@ -26,11 +26,11 @@ namespace Taxi_Manager.Services.Services
             }
         }
 
-        public void PrintEntites<T>(List<T> entites) where T : BaseEntity
+        public void PrintEntites<T>(List<T> entites, string extension = null) where T : BaseEntity
         {
             for (int i = 0; i < entites.Count; i++)
             {
-                Console.WriteLine($"{i + 1}.) {entites[i].Print()}");
+                Console.WriteLine($"{i + 1}.) {entites[i].Print()}" + extension);
             }
         }
 
@@ -39,13 +39,13 @@ namespace Taxi_Manager.Services.Services
             switch (role)
             {
                 case Role.Administrator:
-                    List<MenuOptions> AdminOptions = new List<MenuOptions>() { MenuOptions.PrintAllUsers, MenuOptions.CreateNewUser, MenuOptions.DeleteUser };
+                    List<MenuOptions> AdminOptions = new List<MenuOptions>() { MenuOptions.PrintAllUsers, MenuOptions.CreateNewUser };
                     AdminOptions.AddRange(_defaultOptions);
                     Options = AdminOptions;
                     break;
 
                 case Role.Maintenence:
-                    List<MenuOptions> MaintenenceOptions = new List<MenuOptions>() { MenuOptions.PrintAllCars, MenuOptions.CheckCarLicenceExpiration };
+                    List<MenuOptions> MaintenenceOptions = new List<MenuOptions>() { MenuOptions.PrintAllCars, MenuOptions.CheckCarLicenceExpiration, MenuOptions.DeleteUser };
                     MaintenenceOptions.AddRange(_defaultOptions);
                     Options = MaintenenceOptions;
                     break;
@@ -73,6 +73,6 @@ namespace Taxi_Manager.Services.Services
             MenuOptions selected = Options[menuIndex - 1];
             return selected;
         }
-        
+
     }
 }

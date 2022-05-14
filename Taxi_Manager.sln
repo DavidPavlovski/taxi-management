@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxi_Manager.Domain", "Taxi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxi_Manager.DataAccess", "Taxi_Manager.DataAccess\Taxi_Manager.DataAccess.csproj", "{47B357A3-5280-4EC8-9F49-C858034C493E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taxi_Manager.Helpers", "Taxi_Manager.Helpers\Taxi_Manager.Helpers.csproj", "{246813D6-471B-4623-872F-5BB8BF2AFCD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxi_Manager.Helpers", "Taxi_Manager.Helpers\Taxi_Manager.Helpers.csproj", "{246813D6-471B-4623-872F-5BB8BF2AFCD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
