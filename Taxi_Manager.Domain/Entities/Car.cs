@@ -12,7 +12,6 @@ namespace Taxi_Manager.Domain.Entities
         public string LicensePlate { get; set; }
         public DateTime LicensePlateExpieryDate { get; set; }
         public List<int> AssignedDriversIDs { get; set; }
-
         public Car(string model, string licencePlate, DateTime licencePlateExpieryDate)
         {
             Model = model;

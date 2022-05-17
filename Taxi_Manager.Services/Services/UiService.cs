@@ -39,13 +39,13 @@ namespace Taxi_Manager.Services.Services
             switch (role)
             {
                 case Role.Administrator:
-                    List<MenuOptions> AdminOptions = new List<MenuOptions>() { MenuOptions.PrintAllUsers, MenuOptions.CreateNewUser };
+                    List<MenuOptions> AdminOptions = new List<MenuOptions>() { MenuOptions.PrintAllUsers, MenuOptions.CreateNewUser, MenuOptions.DeleteUser };
                     AdminOptions.AddRange(_defaultOptions);
                     Options = AdminOptions;
                     break;
 
                 case Role.Maintenence:
-                    List<MenuOptions> MaintenenceOptions = new List<MenuOptions>() { MenuOptions.PrintAllCars, MenuOptions.CheckCarLicenceExpiration, MenuOptions.DeleteUser };
+                    List<MenuOptions> MaintenenceOptions = new List<MenuOptions>() { MenuOptions.PrintAllCars, MenuOptions.CheckCarLicenceExpiration };
                     MaintenenceOptions.AddRange(_defaultOptions);
                     Options = MaintenenceOptions;
                     break;
