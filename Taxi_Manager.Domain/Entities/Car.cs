@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Taxi_Manager.Domain.Enums;
 using Taxi_Manager.Helpers;
 
@@ -31,19 +30,19 @@ namespace Taxi_Manager.Domain.Entities
             return LicensePlateExpieryDate > DateTime.Now;
         }
 
-        public void CheckLicencePlateExpiration()
+        public LicenceStatus CheckLicencePlateExpiration()
         {
             if (LicensePlateExpieryDate < DateTime.Now)
             {
-                ConsoleHelper.TextColor($" Car Id [Id] - Plate [{LicensePlate}] expiered on {LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Red);
+                return LicenceStatus.Expiered;
             }
             else if (LicensePlateExpieryDate <= DateTime.Now.AddMonths(3))
             {
-                ConsoleHelper.TextColor($" Car Id [Id] - Plate [{LicensePlate}] expiering on {LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Yellow);
+                return LicenceStatus.NearExpiration;
             }
             else
             {
-                ConsoleHelper.TextColor($" Car Id [Id] - Plate [{LicensePlate}] expiering on {LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Green);
+                return LicenceStatus.Valid;
             }
         }
 

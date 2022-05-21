@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Taxi_Manager.Domain.Enums;
 using Taxi_Manager.Helpers;
 
@@ -38,19 +35,19 @@ namespace Taxi_Manager.Domain.Entities
             Shift = shift;
         }
 
-        public void CheckDriversLicenceExpiration()
+        public LicenceStatus CheckDriversLicenceExpiration()
         {
             if (LicenceExpiery < DateTime.Now)
             {
-                ConsoleHelper.TextColor($"Driver {FullName} with license [{Licence}] expiered on {LicenceExpiery:dd/MM(MMM)/yyy}", ConsoleColor.Red);
+                return LicenceStatus.Expiered;
             }
             else if (LicenceExpiery <= DateTime.Now.AddMonths(3))
             {
-                ConsoleHelper.TextColor($"Driver {FullName} with license [{Licence}] expiering on {LicenceExpiery:dd/MM(MMM)/yyy}", ConsoleColor.Yellow);
+                return LicenceStatus.NearExpiration;
             }
             else
             {
-                ConsoleHelper.TextColor($"Driver {FullName} with license [{Licence}] expiering on {LicenceExpiery:dd/MM(MMM)/yyy}", ConsoleColor.Green);
+                return LicenceStatus.Valid;
             }
         }
         public bool HasValidLicence()

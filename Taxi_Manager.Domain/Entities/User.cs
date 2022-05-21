@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Taxi_Manager.Domain.Enums;
 
 namespace Taxi_Manager.Domain.Entities

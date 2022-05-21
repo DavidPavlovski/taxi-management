@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Taxi_Manager.Domain.Entities;
 
 namespace Taxi_Manager.Services.Interfaces
@@ -11,13 +9,13 @@ namespace Taxi_Manager.Services.Interfaces
         void Login();
         void Logout();
         void CreateNewUser();
-        void DeleteUser(IUIService uiService);
+        void DeleteUser();
         void ChangePassword();
-        void UnassignDriver(IDriverService driverService, IUIService uiService, ICarService carService);
-        void AssignDriver(IDriverService driverService, ICarService carService, IUIService uiService);
+        void UnassignDriver(IDriverService driverService,ICarService carService);
+        void AssignDriver(IDriverService driverService, ICarService carService);
         List<User> FilterUsers(int id);
         void PrintAllDrivers(IDriverService driverService, ICarService carService);
-        void PrintAllCars(IUIService uiService, ICarService carService);
-        void PrintAllUsers(IUIService uiService);
+        void PrintAllCars(ICarService carService);
+        void PrintAllUsers();
     }
 }

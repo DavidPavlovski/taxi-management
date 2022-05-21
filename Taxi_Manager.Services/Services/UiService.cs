@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Taxi_Manager.Domain.Entities;
 using Taxi_Manager.Domain.Enums;
 using Taxi_Manager.Helpers;
 using Taxi_Manager.Services.Enums;
@@ -23,14 +21,6 @@ namespace Taxi_Manager.Services.Services
                     _menuOptions.Clear();
                 }
                 _menuOptions = value;
-            }
-        }
-
-        public void PrintEntites<T>(List<T> entites, string extension = null) where T : BaseEntity
-        {
-            for (int i = 0; i < entites.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}.) {entites[i].Print()}" + extension);
             }
         }
 

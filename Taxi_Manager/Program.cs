@@ -6,7 +6,6 @@ using Taxi_Manager.Services.Services;
 using Taxi_Manager.Services.Interfaces;
 using Taxi_Manager.Helpers;
 using Taxi_Manager.Services.Enums;
-using System.Linq;
 
 namespace Taxi_Manager
 {
@@ -59,7 +58,7 @@ namespace Taxi_Manager
                                 {
                                     Console.Clear();
                                     Console.WriteLine("Printing all users.");
-                                    userService.PrintAllUsers(uiService);
+                                    userService.PrintAllUsers();
                                     Console.ReadLine();
                                     break;
                                 }
@@ -89,7 +88,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    userService.DeleteUser(uiService);
+                                    userService.DeleteUser();
                                     Console.ReadLine();
                                     break;
                                 }
@@ -105,7 +104,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    userService.PrintAllCars(uiService, carService);
+                                    userService.PrintAllCars(carService);
                                     Console.ReadLine();
                                     break;
                                 }
@@ -167,7 +166,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    userService.AssignDriver(driverService, carService, uiService);
+                                    userService.AssignDriver(driverService, carService);
                                     Console.ReadLine();
                                     break;
                                 }
@@ -182,7 +181,7 @@ namespace Taxi_Manager
                                 try
                                 {
                                     Console.Clear();
-                                    userService.UnassignDriver(driverService, uiService, carService);
+                                    userService.UnassignDriver(driverService, carService);
                                     Console.ReadLine();
                                     break;
                                 }

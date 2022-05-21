@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Taxi_Manager.Domain.Entities;
 using Taxi_Manager.Domain.Enums;
 using Taxi_Manager.Helpers;
@@ -11,19 +10,34 @@ namespace Taxi_Manager.Services.Services
 {
     public class CarService : BaseService<Car>, ICarService
     {
-        public List<Car> GetAvailableCarsForShift(Shift shift , IDriverService driverService)
+        public List<Car> GetAvailableCarsForShift(Shift shift, IDriverService driverService)
         {
             return Db.GetAll().Where(x => x.HasValidLicence()).ToList().Where(y => y.AssignedDriversIDs.Any(id => driverService.GetById(id).Shift != shift) || y.AssignedDriversIDs.Count == 0).ToList();
         }
 
         public void CheckLicenceStatus()
         {
-            Db.GetAll().ForEach(x => x.CheckLicencePlateExpiration());
+            List<Car> cars = Db.GetAll().OrderBy(x => x.CheckLicencePlateExpiration()).ToList();
+            foreach (Car car in cars)
+            {
+                switch (car.CheckLicencePlateExpiration())
+                {
+                    case LicenceStatus.Expiered:
+                        ConsoleHelper.TextColor($" Car Id [Id] - Plate [{car.LicensePlate}] expiered on {car.LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Red);
+                        break;
+                    case LicenceStatus.NearExpiration:
+                        ConsoleHelper.TextColor($" Car Id [Id] - Plate [{car.LicensePlate}] expiering on {car.LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Yellow);
+                        break;
+                    case LicenceStatus.Valid:
+                        ConsoleHelper.TextColor($" Car Id [Id] - Plate [{car.LicensePlate}] expiering on {car.LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Green);
+                        break;
+                }
+            }
         }
 
-        public Car SelectCarToAssign(Shift selectedShift, IUIService uiService, IDriverService driverService)
+        public Car SelectCarToAssign(Shift selectedShift, IDriverService driverService)
         {
-            List<Car> filteredCars = GetAvailableCarsForShift(selectedShift , driverService);
+            List<Car> filteredCars = GetAvailableCarsForShift(selectedShift, driverService);
             if (filteredCars.Count == 0)
             {
                 throw new Exception($"No cars available for {selectedShift} shift.");
@@ -33,7 +47,7 @@ namespace Taxi_Manager.Services.Services
                 try
                 {
                     Console.Clear();
-                    uiService.PrintEntites(filteredCars);
+                    filteredCars.PrintEntities();
                     int carIndex = ConsoleHelper.GetNumberInput(ConsoleHelper.GetInput("Enter car index : "), filteredCars.Count);
                     return filteredCars[carIndex - 1];
                 }

@@ -69,12 +69,12 @@ namespace Taxi_Manager.Services.Services
             }
             catch (Exception ex)
             {
-                ConsoleHelper.TextColor("Something went wrong.", ConsoleColor.Green);
+                ConsoleHelper.TextColor("Something went wrong.", ConsoleColor.Red);
                 Console.ReadLine();
             }
         }
 
-        public void DeleteUser(IUIService uiService)
+        public void DeleteUser()
         {
             if (CurrentUser.Role != Role.Administrator) throw new Exception("You are not authorized for this action.");
             List<User> filteredUsers = FilterUsers(CurrentUser.Id);
@@ -84,7 +84,7 @@ namespace Taxi_Manager.Services.Services
                 {
                     Console.Clear();
                     Console.WriteLine("Delete a user :");
-                    uiService.PrintEntites(filteredUsers);
+                    filteredUsers.PrintEntities();
                     string input = ConsoleHelper.GetInput("Enter user index to delete or \"q\" to exit: ");
                     if (input.ToLower() == "q")
                     {
@@ -108,7 +108,7 @@ namespace Taxi_Manager.Services.Services
             }
         }
 
-        public void UnassignDriver(IDriverService driverService, IUIService uiService, ICarService carService)
+        public void UnassignDriver(IDriverService driverService, ICarService carService)
         {
             if (CurrentUser.Role != Role.Manager) throw new Exception("You are not authorized for this action.");
             while (true)
@@ -117,7 +117,7 @@ namespace Taxi_Manager.Services.Services
                 {
                     Console.Clear();
                     List<Driver> assignedDrivers = driverService.GetAssignedDrivers();
-                    uiService.PrintEntites(assignedDrivers);
+                    assignedDrivers.PrintEntities();
 
                     string input = ConsoleHelper.GetInput("Enter index to assign driver or 'q' to exit : ");
                     if (input.ToLower() == "q")
@@ -143,7 +143,7 @@ namespace Taxi_Manager.Services.Services
             }
         }
 
-        public void AssignDriver(IDriverService driverService, ICarService carService, IUIService uiService)
+        public void AssignDriver(IDriverService driverService, ICarService carService)
         {
             if (CurrentUser.Role != Role.Manager) throw new Exception("You are not authorized for this action.");
             while (true)
@@ -152,7 +152,7 @@ namespace Taxi_Manager.Services.Services
                 {
                     Console.Clear();
                     List<Driver> unassingedDrivers = driverService.GetUnassignedDrivers();
-                    uiService.PrintEntites(unassingedDrivers);
+                    unassingedDrivers.PrintEntities();
                     string input = ConsoleHelper.GetInput("Enter index to assign driver or 'q' to exit : ");
                     if (input.ToLower() == "q")
                     {
@@ -162,7 +162,7 @@ namespace Taxi_Manager.Services.Services
                     Driver assignDriver = unassingedDrivers[index - 1];
                     Shift assignShift = EnumHelper.SelectEnum<Shift>("shift");
 
-                    Car assignCar = carService.SelectCarToAssign(assignShift, uiService, driverService);
+                    Car assignCar = carService.SelectCarToAssign(assignShift,driverService);
                     ConsoleHelper.TextColor($"Successfully assigned {assignCar.Model} to {assignDriver.FullName}", ConsoleColor.Green);
                     assignDriver.Assign(assignCar, assignShift);
                     assignCar.AssignDriver(assignDriver.Id);
@@ -179,15 +179,15 @@ namespace Taxi_Manager.Services.Services
             }
         }
 
-        public void PrintAllUsers(IUIService uiService)
+        public void PrintAllUsers()
         {
             if (CurrentUser.Role != Role.Administrator) throw new Exception("You are not authorized for this action.");
-            uiService.PrintEntites(GetAll());
+            GetAll().PrintEntities();
         }
-        public void PrintAllCars(IUIService uiService, ICarService carService)
+        public void PrintAllCars(ICarService carService)
         {
             if (CurrentUser.Role != Role.Maintenence) throw new Exception("You are not authorized for this action.");
-            uiService.PrintEntites(carService.GetAll());
+            carService.GetAll().PrintEntities();
         }
         public void PrintAllDrivers(IDriverService driverService, ICarService carService)
         {
