@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Taxi_Manager.Domain.Enums;
-using Taxi_Manager.Helpers;
 
 namespace Taxi_Manager.Domain.Entities
 {
@@ -28,22 +27,6 @@ namespace Taxi_Manager.Domain.Entities
         public bool HasValidLicence()
         {
             return LicensePlateExpieryDate > DateTime.Now;
-        }
-
-        public LicenceStatus CheckLicencePlateExpiration()
-        {
-            if (LicensePlateExpieryDate < DateTime.Now)
-            {
-                return LicenceStatus.Expiered;
-            }
-            else if (LicensePlateExpieryDate <= DateTime.Now.AddMonths(3))
-            {
-                return LicenceStatus.NearExpiration;
-            }
-            else
-            {
-                return LicenceStatus.Valid;
-            }
         }
 
         public void AssignDriver(int driverID)

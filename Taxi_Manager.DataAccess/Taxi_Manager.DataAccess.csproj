@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Taxi_Manager.Domain\Taxi_Manager.Domain.csproj" />
+    <ProjectReference Include="..\Taxi_Manager.Helpers\Taxi_Manager.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

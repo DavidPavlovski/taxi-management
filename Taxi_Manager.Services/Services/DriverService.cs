@@ -12,10 +12,11 @@ namespace Taxi_Manager.Services.Services
     {
         public void CheckLicenceStatus()
         {
-            List<Driver> drivers = Db.GetAll().OrderBy(x => x.CheckDriversLicenceExpiration()).ToList();
+            List<Driver> drivers = Db.GetAll().OrderByDescending(x => x.LicenceExpiery).ToList();
             foreach (Driver driver in drivers)
             {
-                switch (driver.CheckDriversLicenceExpiration())
+                LicenceStatus licenceStatus = DateTimeHelper.GetLicenceStatus(driver.LicenceExpiery);
+                switch (licenceStatus)
                 {
                     case LicenceStatus.Expiered:
                         ConsoleHelper.TextColor($"Driver {driver.FullName} with license [{driver.Licence}] expiered on {driver.LicenceExpiery:dd/MM(MMM)/yyy}", ConsoleColor.Red);

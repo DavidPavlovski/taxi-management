@@ -1,6 +1,5 @@
 ﻿using System;
 using Taxi_Manager.Domain.Enums;
-using Taxi_Manager.Helpers;
 
 namespace Taxi_Manager.Domain.Entities
 {
@@ -34,22 +33,7 @@ namespace Taxi_Manager.Domain.Entities
             AssignedCarID = car.Id;
             Shift = shift;
         }
-
-        public LicenceStatus CheckDriversLicenceExpiration()
-        {
-            if (LicenceExpiery < DateTime.Now)
-            {
-                return LicenceStatus.Expiered;
-            }
-            else if (LicenceExpiery <= DateTime.Now.AddMonths(3))
-            {
-                return LicenceStatus.NearExpiration;
-            }
-            else
-            {
-                return LicenceStatus.Valid;
-            }
-        }
+       
         public bool HasValidLicence()
         {
             return LicenceExpiery > DateTime.Now;

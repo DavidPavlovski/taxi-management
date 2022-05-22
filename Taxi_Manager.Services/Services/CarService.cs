@@ -17,10 +17,11 @@ namespace Taxi_Manager.Services.Services
 
         public void CheckLicenceStatus()
         {
-            List<Car> cars = Db.GetAll().OrderBy(x => x.CheckLicencePlateExpiration()).ToList();
+            List<Car> cars = Db.GetAll().OrderByDescending(x => x.LicensePlateExpieryDate).ToList();
             foreach (Car car in cars)
             {
-                switch (car.CheckLicencePlateExpiration())
+                LicenceStatus licenceStatus = DateTimeHelper.GetLicenceStatus(car.LicensePlateExpieryDate);
+                switch (licenceStatus)
                 {
                     case LicenceStatus.Expiered:
                         ConsoleHelper.TextColor($" Car Id [Id] - Plate [{car.LicensePlate}] expiered on {car.LicensePlateExpieryDate:dd/MM(MMM)/yyy}", ConsoleColor.Red);
